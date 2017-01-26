@@ -9,14 +9,14 @@
     </style>
     <style name="listCount">
         <item name="android:textSize">28dp</item>
-        <item name="android:textColor">@color/colorDescriptionText</item>
-        <item name="android:paddingBottom">30dp</item>
-        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:textColor">@color/colorCountText</item>
     </style>
     <style name="listDescription">
-        <item name="android:textSize">18dp</item>
-        <item name="android:textColor">@color/colorCountText</item>
-        <item name="android:paddingBottom">30dp</item>
-        <item name="android:layout_marginBottom">30dp</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/colorDescriptionText</item>
+    </style>
+    <style name="listCategory">
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">#e21b0f02</item>
     </style>
 </resources>

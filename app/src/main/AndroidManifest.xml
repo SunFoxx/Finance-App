@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.CategorySelection"
-            android:theme="@style/Theme.AppCompat.Light.Dialog">
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            android:label="Select category">
         </activity>
     </application>
 

@@ -2,6 +2,7 @@ package com.esharoha.financeapp.Activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -58,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
         String descriptionFromField = text.getText().toString().trim();
         String categoryFromField = categoryText.getText().toString().trim();
 
-        if (countFromField.isEmpty() || descriptionFromField.isEmpty() || categoryFromField.isEmpty()) {
+        //Check if fields are not filled
+        if (countFromField.isEmpty() || categoryFromField.isEmpty()) {
             Toast err = Toast.makeText(this, "Please, fill all blanks", Toast.LENGTH_SHORT);
             err.setGravity(Gravity.CENTER, 0, -250);
             err.show();
@@ -66,8 +68,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         int realCount = Integer.parseInt(countFromField);
-        Action newAct = new Action(realCount, descriptionFromField);
+
+        //assigning category class for new action
+        Category realCategory = new Category("Other");
+        for (Category cat : Category.categories) {
+            if (cat.getName().equals(categoryFromField)) {
+                realCategory = cat;
+                break;
+            }
+        }
+
+
+        Action newAct = (descriptionFromField.isEmpty()) ? new Action(realCount, realCategory) : new Action(realCount, descriptionFromField, realCategory);
         allActions.add(newAct);
+
         //refreshing list
         table.removeAllViews();
         sum = 0;
@@ -75,20 +89,33 @@ public class MainActivity extends AppCompatActivity {
         text.setText("");
         categoryText.setText("");
 
+        //filling list
         for (Action action : allActions) {
             TextView countField = new TextView(this);
             countField.setText(Integer.toString(action.getCount()));
             countField.setTextAppearance(this, R.style.listCount);
-            countField.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+            countField.setGravity(Gravity.RIGHT);
+            countField.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
             ));
 
-            TextView descField = new TextView(this);
-            descField.setText(action.getDescription());
-            descField.setTextAppearance(this, R.style.listDescription);
-            descField.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+            TextView descField = null;
+            if (!action.getDescription().equals("")) {
+                descField = new TextView(this);
+                descField.setText(action.getDescription());
+                descField.setTextAppearance(this, R.style.listCategory);
+                descField.setLayoutParams(new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+                ));
+            }
+
+            TextView categoryField = new TextView(this);
+            categoryField.setText(action.getCategory().getName());
+            categoryField.setTextAppearance(this, R.style.listDescription);
+            categoryField.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
             ));
+
 
             View divider = new View(this);
             divider.setLayoutParams(new ViewGroup.LayoutParams(
@@ -98,9 +125,32 @@ public class MainActivity extends AppCompatActivity {
 
             sum = sum + action.getCount();
 
-            table.addView(descField);
-            table.addView(countField);
-            table.addView(divider);
+            //Filling action field
+
+            LinearLayout actionBox = new LinearLayout(this);
+            actionBox.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams actionBoxParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            actionBoxParams.setMargins(0, 20, 0, 0);
+            actionBox.setLayoutParams(actionBoxParams);
+            actionBox.setBackground(getResources().getDrawable(R.drawable.list_background));
+
+            if (descField != null) {
+                actionBox.addView(descField);
+            }
+
+            LinearLayout actionSecondRow = new LinearLayout(this);
+            actionSecondRow.setOrientation(LinearLayout.HORIZONTAL);
+            actionSecondRow.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+            actionSecondRow.addView(categoryField);
+            actionSecondRow.addView(countField);
+
+            actionBox.addView(actionSecondRow);
+            //actionBox.addView(divider);
+
+            table.addView(actionBox, 0);
         }
 
         String sumText = "Sum: " + Integer.toString(sum);

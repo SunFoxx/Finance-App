@@ -68,7 +68,9 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/listLayout">
+            android:id="@+id/listLayout"
+            android:divider="@drawable/list_divider"
+            android:showDividers="middle|end">
         </LinearLayout>
     </ScrollView>
 
