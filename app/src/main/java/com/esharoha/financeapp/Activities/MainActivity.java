@@ -5,7 +5,9 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -18,10 +20,13 @@ import com.esharoha.financeapp.R;
 import com.esharoha.financeapp.common.Action;
 import com.esharoha.financeapp.common.Category;
 
+import java.util.HashMap;
+
 import static com.esharoha.financeapp.common.Action.allActions;
 
 public class MainActivity extends AppCompatActivity {
 
+    private HashMap<LinearLayout, Action> actionMap;
     private EditText number;
     private EditText text;
     private LinearLayout table;
@@ -33,11 +38,40 @@ public class MainActivity extends AppCompatActivity {
 
     private int sum = 0;
 
+    private View.OnClickListener actionItemListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            showPopUpMenu(v);
+        }
+    };
+
+    private void showPopUpMenu(final View v) {
+        PopupMenu actionMenu = new PopupMenu(this, v);
+        actionMenu.inflate(R.menu.action_popup);
+
+        actionMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.remove) {
+                    Action.allActions.remove(actionMap.get((LinearLayout)v));
+                    actionMap.remove(v);
+                    table.removeView(v);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        actionMenu.show();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        actionMap = new HashMap<>();
         number = (EditText) findViewById(R.id.moneySpent);
         text = (EditText) findViewById(R.id.description);
         table = (LinearLayout) findViewById(R.id.listLayout);
@@ -83,11 +117,7 @@ public class MainActivity extends AppCompatActivity {
         allActions.add(newAct);
 
         //refreshing list
-        table.removeAllViews();
-        sum = 0;
-        number.setText("");
-        text.setText("");
-        categoryText.setText("");
+        clearTable();
 
         //filling list
         for (Action action : allActions) {
@@ -134,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
             actionBoxParams.setMargins(0, 20, 0, 0);
             actionBox.setLayoutParams(actionBoxParams);
             actionBox.setBackground(getResources().getDrawable(R.drawable.list_background));
+            actionBox.setOnClickListener(actionItemListener);
 
             if (descField != null) {
                 actionBox.addView(descField);
@@ -151,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
             //actionBox.addView(divider);
 
             table.addView(actionBox, 0);
+            actionMap.put(actionBox, action);
         }
 
         String sumText = "Sum: " + Integer.toString(sum);
@@ -178,4 +210,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void clearTable() {
+        table.removeAllViews();
+        sum = 0;
+        number.setText("");
+        text.setText("");
+        categoryText.setText("");
+    }
+
 }
