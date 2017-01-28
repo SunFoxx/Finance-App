@@ -20,12 +20,19 @@ import com.esharoha.financeapp.R;
 import com.esharoha.financeapp.common.Action;
 import com.esharoha.financeapp.common.Category;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.esharoha.financeapp.common.Action.allActions;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final static String SAVE_FILE = "content";
     private HashMap<LinearLayout, Action> actionMap;
     private EditText number;
     private EditText text;
@@ -78,11 +85,7 @@ public class MainActivity extends AppCompatActivity {
         sumField = (TextView) findViewById(R.id.Summ);
         categoryText = (TextView) findViewById(R.id.textCategory);
 
-        for (Action act : allActions)
-            sum += act.getCount();
-
-        String sumText = "Sum: " + Integer.toString(sum);
-        sumField.setText(sumText);
+        fillTable();
 
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
@@ -120,6 +123,35 @@ public class MainActivity extends AppCompatActivity {
         clearTable();
 
         //filling list
+        fillTable();
+
+    }
+
+    public void onSelectCategoryClick(View view) {
+        Intent askForCategory = new Intent(this, CategorySelection.class);
+        startActivityForResult(askForCategory, REQUEST_FOR_CAT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_FOR_CAT ) {
+            if (resultCode == RESULT_OK) {
+                    String cat = data.getStringExtra(CategorySelection.ANSWER_KEY);
+                    categoryText.setText(cat);
+            }
+        }
+    }
+
+    private void clearTable() {
+        table.removeAllViews();
+        sum = 0;
+        number.setText("");
+        text.setText("");
+        categoryText.setText("");
+    }
+
+    private void fillTable() {
         for (Action action : allActions) {
             TextView countField = new TextView(this);
             countField.setText(Integer.toString(action.getCount()));
@@ -192,31 +224,5 @@ public class MainActivity extends AppCompatActivity {
         if (current != null) {
             imm.hideSoftInputFromWindow(current.getWindowToken(), 0);
         }
-
     }
-
-    public void onSelectCategoryClick(View view) {
-        Intent askForCategory = new Intent(this, CategorySelection.class);
-        startActivityForResult(askForCategory, REQUEST_FOR_CAT);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_FOR_CAT ) {
-            if (resultCode == RESULT_OK) {
-                    String cat = data.getStringExtra(CategorySelection.ANSWER_KEY);
-                    categoryText.setText(cat);
-            }
-        }
-    }
-
-    private void clearTable() {
-        table.removeAllViews();
-        sum = 0;
-        number.setText("");
-        text.setText("");
-        categoryText.setText("");
-    }
-
 }

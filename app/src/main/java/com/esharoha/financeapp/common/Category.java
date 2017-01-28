@@ -2,10 +2,11 @@ package com.esharoha.financeapp.common;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Category {
 
-    public static ArrayList<Category> categories = new ArrayList<>();
+    public static List<Category> categories = new ArrayList<>();
 
     private String name;
 
