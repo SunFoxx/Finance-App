@@ -1,8 +1,6 @@
 package com.esharoha.financeapp.Activities;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
@@ -22,13 +20,17 @@ import com.esharoha.financeapp.common.Category;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
 
 import static com.esharoha.financeapp.common.Action.allActions;
+import static com.esharoha.financeapp.common.Category.categories;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView sumField;
     private TextView categoryText;
     private InputMethodManager imm;
-    private Category category;
     private static final int REQUEST_FOR_CAT = 1;
 
     private int sum = 0;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     Action.allActions.remove(actionMap.get((LinearLayout)v));
                     actionMap.remove(v);
                     table.removeView(v);
+                    refreshSum();
                     return true;
                 } else {
                     return false;
@@ -85,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         sumField = (TextView) findViewById(R.id.Summ);
         categoryText = (TextView) findViewById(R.id.textCategory);
 
+        loadData();
         fillTable();
 
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -132,6 +135,12 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(askForCategory, REQUEST_FOR_CAT);
     }
 
+    /**
+     * Getting date from other Activities
+     * @param requestCode request ID
+     * @param resultCode result from other Activity
+     * @param data data from other Activity
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -143,6 +152,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Remove all items from table and fields
+     */
     private void clearTable() {
         table.removeAllViews();
         sum = 0;
@@ -151,8 +163,12 @@ public class MainActivity extends AppCompatActivity {
         categoryText.setText("");
     }
 
+    /**
+     * Reloading our Table
+     */
     private void fillTable() {
         for (Action action : allActions) {
+            //generating Textviews
             TextView countField = new TextView(this);
             countField.setText(Integer.toString(action.getCount()));
             countField.setTextAppearance(this, R.style.listCount);
@@ -177,13 +193,6 @@ public class MainActivity extends AppCompatActivity {
             categoryField.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
             ));
-
-
-            View divider = new View(this);
-            divider.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, 2
-            ));
-            divider.setBackgroundColor(Color.DKGRAY);
 
             sum = sum + action.getCount();
 
@@ -211,7 +220,6 @@ public class MainActivity extends AppCompatActivity {
             actionSecondRow.addView(countField);
 
             actionBox.addView(actionSecondRow);
-            //actionBox.addView(divider);
 
             table.addView(actionBox, 0);
             actionMap.put(actionBox, action);
@@ -224,5 +232,74 @@ public class MainActivity extends AppCompatActivity {
         if (current != null) {
             imm.hideSoftInputFromWindow(current.getWindowToken(), 0);
         }
+    }
+
+    /**
+     * Part of an Activity lifecycle
+     * Here we are saving our data
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveData();
+    }
+
+    /**
+     * Serializing data
+     */
+    private void saveData() {
+        try {
+            FileOutputStream fos = new FileOutputStream(getApplicationContext().getFilesDir() + File.separator + SAVE_FILE);
+            ObjectOutputStream out = new ObjectOutputStream(fos);
+            out.writeObject(allActions);
+            out.writeObject(categories);
+            out.close();
+        } catch (FileNotFoundException e) {
+            Toast err = Toast.makeText(this, "Save error: fnf", Toast.LENGTH_SHORT);
+            err.setGravity(Gravity.CENTER, 0, -250);
+            err.show();
+        }
+        catch (IOException e) {
+            Toast err = Toast.makeText(this, "Save error: IO", Toast.LENGTH_SHORT);
+            err.setGravity(Gravity.CENTER, 0, -250);
+            err.show();
+        }
+    }
+    /**
+     * Deserialization
+     */
+    private void loadData() {
+        try {
+            FileInputStream fis = new FileInputStream(getApplicationContext().getFilesDir() + File.separator + SAVE_FILE);
+            ObjectInputStream input = new ObjectInputStream(fis);
+            Action.allActions = (LinkedList<Action>) input.readObject();
+            Category.categories = (ArrayList<Category>) input.readObject();
+            fis.close();
+        } catch (FileNotFoundException e) {
+            Toast err = Toast.makeText(this, "Load error: fnf", Toast.LENGTH_SHORT);
+            err.setGravity(Gravity.CENTER, 0, -250);
+            err.show();
+        } catch (IOException e) {
+            Toast err = Toast.makeText(this, "Load error: IO", Toast.LENGTH_SHORT);
+            err.setGravity(Gravity.CENTER, 0, -250);
+            err.show();
+        } catch (ClassNotFoundException e) {
+            Toast err = Toast.makeText(this, "Load error: cnf", Toast.LENGTH_SHORT);
+            err.setGravity(Gravity.CENTER, 0, -250);
+            err.show();
+        }
+    }
+
+    /**
+     * Refreshing Sum field
+     */
+    private void refreshSum() {
+        sum = 0;
+        for (Action act : allActions) {
+            sum += act.getCount();
+        }
+
+        String sumText = "Sum: " + Integer.toString(sum);
+        sumField.setText(sumText);
     }
 }

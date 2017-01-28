@@ -1,14 +1,15 @@
 package com.esharoha.financeapp.common;
 
-
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.LinkedList;
-import java.util.List;
 
-public class Action {
+public class Action implements Serializable {
     private int count;
     private String description = "";
     private Category category;
-    public static List<Action> allActions = new LinkedList<>();
+    public static LinkedList<Action> allActions = new LinkedList<>();
 
     public Action(int count, Category category) {
         this.count = count;
