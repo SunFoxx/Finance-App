@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
             ));
 
             TextView dateField = new TextView(this);
-            String dateStr = action.getDate().get(GregorianCalendar.DAY_OF_MONTH) + "." + action.getDate().get(GregorianCalendar.MONTH) + 1;
+            String dateStr = action.getDate().get(GregorianCalendar.DAY_OF_MONTH) + "." + (action.getDate().get(GregorianCalendar.MONTH) + 1);
             dateField.setText(dateStr);
             dateField.setGravity(Gravity.END);
             dateField.setTextAppearance(this, R.style.listDescription);
