@@ -17,6 +17,7 @@ public class CategorySelection extends AppCompatActivity {
 
     private TableLayout layout;
     public final static String ANSWER_KEY = "category";
+
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

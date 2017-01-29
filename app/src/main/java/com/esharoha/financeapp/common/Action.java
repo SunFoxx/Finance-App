@@ -26,6 +26,19 @@ public class Action implements Serializable {
         this.date = new GregorianCalendar();
     }
 
+    public Action(int count, Category category, GregorianCalendar date) {
+        this.count = count;
+        this.category = category;
+        this.date = date;
+    }
+
+    public Action(int count, Category category, String description, GregorianCalendar date) {
+        this.count = count;
+        this.category = category;
+        this.date = date;
+        this.description = description;
+    }
+
     public int getCount() {
         return count;
     }

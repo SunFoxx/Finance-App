@@ -41,12 +41,12 @@ public class MainActivity extends AppCompatActivity {
     private EditText number;
     private EditText text;
     private LinearLayout table;
-    private TextView sumField;
     private Button categoryButton;
+    private Button dateButton;
     private InputMethodManager imm;
     private static final int REQUEST_FOR_CAT = 1;
+    private static final int REQUEST_FOR_DATE = 2;
 
-    private int sum = 0;
 
     private View.OnClickListener actionItemListener = new View.OnClickListener() {
         @Override
@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
                     Action.allActions.remove(actionMap.get((LinearLayout)v));
                     actionMap.remove(v);
                     table.removeView(v);
-                    refreshSum();
                     return true;
                 } else {
                     return false;
@@ -86,8 +85,8 @@ public class MainActivity extends AppCompatActivity {
         number = (EditText) findViewById(R.id.moneySpent);
         text = (EditText) findViewById(R.id.description);
         table = (LinearLayout) findViewById(R.id.listLayout);
-        sumField = (TextView) findViewById(R.id.Summ);
         categoryButton = (Button) findViewById(R.id.SelectCategory);
+        dateButton = (Button) findViewById(R.id.SelectDate);
 
         loadData();
         fillTable();
@@ -100,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         String countFromField = number.getText().toString().trim();
         String descriptionFromField = text.getText().toString().trim();
         String categoryFromField = categoryButton.getText().toString().trim();
+        String dateFromField = dateButton.getText().toString().trim();
 
         //Check if fields are not filled
         if (countFromField.isEmpty() || categoryFromField.equals(getResources().getString(R.string.select_category))) {
@@ -120,8 +120,29 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        Action newAct;
+        boolean descriptionEmpty = descriptionFromField.isEmpty();
+        boolean dateEmpty = dateFromField.equals(getResources().getString(R.string.set_date));
 
-        Action newAct = (descriptionFromField.isEmpty()) ? new Action(realCount, realCategory) : new Action(realCount, descriptionFromField, realCategory);
+        GregorianCalendar realDate = null;
+        if (!dateEmpty) {
+            String[] dateToArr = dateFromField.split("\\.");
+            int yr = Integer.parseInt(dateToArr[2]);
+            int mn = Integer.parseInt(dateToArr[1]) - 1;
+            int dy = Integer.parseInt(dateToArr[0]);
+            realDate = new GregorianCalendar(yr, mn, dy);
+        }
+
+        if (!descriptionEmpty && !dateEmpty) {
+            newAct = new Action(realCount, realCategory, descriptionFromField, realDate);
+        } else if (descriptionEmpty && !dateEmpty) {
+            newAct = new Action(realCount, realCategory, realDate);
+        } else if (!descriptionEmpty) {
+            newAct = new Action(realCount, descriptionFromField, realCategory);
+        } else {
+            newAct = new Action(realCount, realCategory);
+        }
+
         allActions.add(newAct);
 
         //refreshing list
@@ -148,8 +169,13 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_FOR_CAT ) {
             if (resultCode == RESULT_OK) {
-                    String cat = data.getStringExtra(CategorySelection.ANSWER_KEY);
-                    categoryButton.setText(cat);
+                String cat = data.getStringExtra(CategorySelection.ANSWER_KEY);
+                categoryButton.setText(cat);
+            }
+        } else if (requestCode == REQUEST_FOR_DATE) {
+            if (resultCode == RESULT_OK) {
+                String date = data.getStringExtra(DateSelection.ANSWER_KEY);
+                dateButton.setText(date);
             }
         }
     }
@@ -159,10 +185,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private void clearTable() {
         table.removeAllViews();
-        sum = 0;
         number.setText("");
         text.setText("");
         categoryButton.setText(getResources().getString(R.string.select_category));
+        dateButton.setText(getResources().getString(R.string.set_date));
     }
 
     /**
@@ -205,8 +231,6 @@ public class MainActivity extends AppCompatActivity {
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
             ));
 
-            sum = sum + action.getCount();
-
             //Filling action field
 
             LinearLayout actionBox = new LinearLayout(this);
@@ -242,9 +266,6 @@ public class MainActivity extends AppCompatActivity {
             table.addView(actionBox, 0);
             actionMap.put(actionBox, action);
         }
-
-        String sumText = "Sum: " + Integer.toString(sum);
-        sumField.setText(sumText);
 
         View current = this.getCurrentFocus();
         if (current != null) {
@@ -308,19 +329,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Refreshing Sum field
-     */
-    private void refreshSum() {
-        sum = 0;
-        for (Action act : allActions) {
-            sum += act.getCount();
-        }
-
-        String sumText = "Sum: " + Integer.toString(sum);
-        sumField.setText(sumText);
-    }
-
     public void onSetDateClick(View view) {
+        Intent askForDate = new Intent(this, DateSelection.class);
+        startActivityForResult(askForDate, REQUEST_FOR_DATE);
     }
 }

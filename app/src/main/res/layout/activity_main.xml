@@ -4,86 +4,134 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.esharoha.financeapp.Activities.MainActivity"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:gravity="center_horizontal">
-
-    <EditText
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:id="@+id/moneySpent"
-        android:hint="how much did you spent"
-        android:layout_width="match_parent" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/description"
-        android:hint="description" />
+    android:weightSum="1"
+    tools:context="com.esharoha.financeapp.Activities.MainActivity">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:paddingBottom="5dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="10dp">
+        android:layout_weight="0.95"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
-        <Button
-            android:text="@string/select_category"
-            android:layout_height="wrap_content"
-            android:id="@+id/SelectCategory"
-            android:onClick="onSelectCategoryClick"
-            android:fontFamily="sans-serif-medium"
-            android:background="@android:drawable/btn_default"
-            android:layout_weight="1.2"
-            android:layout_width="0dp" />
-
-        <Button
-            android:text="Set Date"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:id="@+id/button"
-            android:layout_weight="1.2"
-            android:onClick="onSetDateClick"
-            android:background="@android:drawable/btn_default" />
-
-    </LinearLayout>
-
-    <Button
-        android:text="@string/buttonText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/submit"
-        android:onClick="onSubmitClick"
-        android:background="@android:drawable/btn_default" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/Summ"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:orientation="vertical"
+        <EditText
+            android:id="@+id/moneySpent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/listLayout"
-            android:divider="@drawable/list_divider"
-            android:showDividers="middle|end">
-        </LinearLayout>
-    </ScrollView>
+            android:hint="how much did you spent"
+            android:inputType="number" />
 
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="description"
+            android:inputType="textPersonName" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="10dp">
+
+            <Button
+                android:id="@+id/SelectCategory"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:background="@android:drawable/btn_default"
+                android:fontFamily="sans-serif-medium"
+                android:onClick="onSelectCategoryClick"
+                android:text="@string/select_category" />
+
+            <Button
+                android:id="@+id/SelectDate"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.2"
+                android:background="@android:drawable/btn_default"
+                android:onClick="onSetDateClick"
+                android:text="@string/set_date" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_default"
+            android:onClick="onSubmitClick"
+            android:text="@string/buttonText" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/listLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/list_divider"
+                android:orientation="vertical"
+                android:showDividers="middle|end">
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.05"
+        android:divider="@drawable/buttons_divider"
+        android:orientation="horizontal"
+        android:showDividers="middle">
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="2dp"
+            android:layout_weight="1"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="1dp"
+            android:layout_weight="1"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="1"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="1"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:text="Button" />
+    </LinearLayout>
 </LinearLayout>
