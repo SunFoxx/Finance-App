@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText text;
     private LinearLayout table;
     private TextView sumField;
-    private TextView categoryText;
+    private Button categoryButton;
     private InputMethodManager imm;
     private static final int REQUEST_FOR_CAT = 1;
 
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         text = (EditText) findViewById(R.id.description);
         table = (LinearLayout) findViewById(R.id.listLayout);
         sumField = (TextView) findViewById(R.id.Summ);
-        categoryText = (TextView) findViewById(R.id.textCategory);
+        categoryButton = (Button) findViewById(R.id.SelectCategory);
 
         loadData();
         fillTable();
@@ -97,11 +99,11 @@ public class MainActivity extends AppCompatActivity {
     public void onSubmitClick(View view) {
         String countFromField = number.getText().toString().trim();
         String descriptionFromField = text.getText().toString().trim();
-        String categoryFromField = categoryText.getText().toString().trim();
+        String categoryFromField = categoryButton.getText().toString().trim();
 
         //Check if fields are not filled
-        if (countFromField.isEmpty() || categoryFromField.isEmpty()) {
-            Toast err = Toast.makeText(this, "Please, fill all blanks", Toast.LENGTH_SHORT);
+        if (countFromField.isEmpty() || categoryFromField.equals(getResources().getString(R.string.select_category))) {
+            Toast err = Toast.makeText(this, "Please, fill at least count and category", Toast.LENGTH_SHORT);
             err.setGravity(Gravity.CENTER, 0, -250);
             err.show();
             return;
@@ -147,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_FOR_CAT ) {
             if (resultCode == RESULT_OK) {
                     String cat = data.getStringExtra(CategorySelection.ANSWER_KEY);
-                    categoryText.setText(cat);
+                    categoryButton.setText(cat);
             }
         }
     }
@@ -160,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         sum = 0;
         number.setText("");
         text.setText("");
-        categoryText.setText("");
+        categoryButton.setText(getResources().getString(R.string.select_category));
     }
 
     /**
@@ -172,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
             TextView countField = new TextView(this);
             countField.setText(Integer.toString(action.getCount()));
             countField.setTextAppearance(this, R.style.listCount);
-            countField.setGravity(Gravity.RIGHT);
+            countField.setGravity(Gravity.END);
             countField.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
             ));
@@ -182,8 +184,8 @@ public class MainActivity extends AppCompatActivity {
                 descField = new TextView(this);
                 descField.setText(action.getDescription());
                 descField.setTextAppearance(this, R.style.listCategory);
-                descField.setLayoutParams(new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+                descField.setLayoutParams(new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
                 ));
             }
 
@@ -191,6 +193,15 @@ public class MainActivity extends AppCompatActivity {
             categoryField.setText(action.getCategory().getName());
             categoryField.setTextAppearance(this, R.style.listDescription);
             categoryField.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
+            ));
+
+            TextView dateField = new TextView(this);
+            String dateStr = action.getDate().get(GregorianCalendar.DAY_OF_MONTH) + "." + action.getDate().get(GregorianCalendar.MONTH) + 1;
+            dateField.setText(dateStr);
+            dateField.setGravity(Gravity.END);
+            dateField.setTextAppearance(this, R.style.listDescription);
+            dateField.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
             ));
 
@@ -207,9 +218,15 @@ public class MainActivity extends AppCompatActivity {
             actionBox.setBackground(getResources().getDrawable(R.drawable.list_background));
             actionBox.setOnClickListener(actionItemListener);
 
+            LinearLayout actionFirstRow = new LinearLayout(this);
+            actionFirstRow.setOrientation(LinearLayout.HORIZONTAL);
+            actionFirstRow.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
             if (descField != null) {
-                actionBox.addView(descField);
+                actionFirstRow.addView(descField);
             }
+            actionFirstRow.addView(dateField);
 
             LinearLayout actionSecondRow = new LinearLayout(this);
             actionSecondRow.setOrientation(LinearLayout.HORIZONTAL);
@@ -219,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
             actionSecondRow.addView(categoryField);
             actionSecondRow.addView(countField);
 
+            actionBox.addView(actionFirstRow);
             actionBox.addView(actionSecondRow);
 
             table.addView(actionBox, 0);
@@ -301,5 +319,8 @@ public class MainActivity extends AppCompatActivity {
 
         String sumText = "Sum: " + Integer.toString(sum);
         sumField.setText(sumText);
+    }
+
+    public void onSetDateClick(View view) {
     }
 }

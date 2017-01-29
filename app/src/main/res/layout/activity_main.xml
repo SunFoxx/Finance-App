@@ -30,20 +30,32 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="10dp">
 
         <Button
-            android:text="Select Category"
-            android:layout_width="wrap_content"
+            android:text="@string/select_category"
             android:layout_height="wrap_content"
             android:id="@+id/SelectCategory"
-            android:onClick="onSelectCategoryClick" />
+            android:onClick="onSelectCategoryClick"
+            android:fontFamily="sans-serif-medium"
+            android:background="@android:drawable/btn_default"
+            android:layout_weight="1.2"
+            android:layout_width="0dp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textCategory"
-            android:layout_weight="1" />
+        <Button
+            android:text="Set Date"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/button"
+            android:layout_weight="1.2"
+            android:onClick="onSetDateClick"
+            android:background="@android:drawable/btn_default" />
+
     </LinearLayout>
 
     <Button
@@ -51,8 +63,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/submit"
-        style="@style/Widget.AppCompat.Button"
-        android:onClick="onSubmitClick" />
+        android:onClick="onSubmitClick"
+        android:background="@android:drawable/btn_default" />
 
     <TextView
         android:layout_width="match_parent"

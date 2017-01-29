@@ -3,23 +3,27 @@ package com.esharoha.financeapp.common;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
 public class Action implements Serializable {
     private int count;
     private String description = "";
     private Category category;
+    private GregorianCalendar date;
     public static LinkedList<Action> allActions = new LinkedList<>();
 
     public Action(int count, Category category) {
         this.count = count;
         this.category = category;
+        this.date = new GregorianCalendar();
     }
 
     public Action(int count, String description, Category category) {
         this.count = count;
         this.description = description;
         this.category = category;
+        this.date = new GregorianCalendar();
     }
 
     public int getCount() {
@@ -34,4 +38,7 @@ public class Action implements Serializable {
         return category;
     }
 
+    public GregorianCalendar getDate() {
+        return date;
+    }
 }
