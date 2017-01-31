@@ -3,4 +3,6 @@
     <string name="buttonText">Add</string>
     <string name="select_category">Select Category</string>
     <string name="set_date">Set Date</string>
+    <string name="statistics">Statistics</string>
+    <string name="budget">Budget</string>
 </resources>

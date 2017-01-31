@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener actionItemListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            v.setBackground(getResources().getDrawable(R.drawable.list_active));
             showPopUpMenu(v);
         }
     };
@@ -70,6 +71,13 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     return false;
                 }
+            }
+        });
+
+        actionMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                v.setBackground(getResources().getDrawable(R.drawable.list_background));
             }
         });
 

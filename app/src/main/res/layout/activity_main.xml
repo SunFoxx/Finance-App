@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -92,46 +93,66 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.05"
+        android:layout_weight="0.07"
         android:divider="@drawable/buttons_divider"
         android:orientation="horizontal"
-        android:showDividers="middle">
+        android:showDividers="middle"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp">
 
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginRight="2dp"
             android:layout_weight="1"
-            android:background="@android:drawable/screen_background_light_transparent"
-            android:text="Button" />
+            android:id="@+id/buttonsTab1">
 
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="1dp"
-            android:layout_weight="1"
-            android:background="@android:drawable/screen_background_light_transparent"
-            android:text="Button" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/ic_menu_view"
+                android:id="@+id/imageView"
+                android:layout_weight="1"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginLeft="40dp" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="1dp"
-            android:layout_weight="1"
-            android:background="@android:drawable/screen_background_light_transparent"
-            android:text="Button" />
+            <Button
+                android:id="@+id/StatisticsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="5"
+                android:text="@string/statistics"
+                android:gravity="left|center_vertical"
+                android:background="@drawable/fully_transparent" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="2dp"
             android:layout_weight="1"
-            android:background="@android:drawable/screen_background_light_transparent"
-            android:text="Button" />
+            android:id="@+id/buttonsTab2">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/ic_menu_agenda"
+                android:id="@+id/imageView2"
+                android:layout_weight="1"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginLeft="40dp"/>
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="1dp"
+                android:layout_weight="5"
+                android:text="@string/budget"
+                android:gravity="left|center_vertical"
+                android:background="@drawable/fully_transparent" />
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>
