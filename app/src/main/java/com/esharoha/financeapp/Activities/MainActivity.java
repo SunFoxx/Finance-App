@@ -209,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
             countField.setText(Integer.toString(action.getCount()));
             countField.setTextAppearance(this, R.style.listCount);
             countField.setGravity(Gravity.END);
+            countField.setPadding(0, 0, 15, 0);
             countField.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
             ));
@@ -218,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
                 descField = new TextView(this);
                 descField.setText(action.getDescription());
                 descField.setTextAppearance(this, R.style.listCategory);
+                descField.setPadding(15, 0, 0, 0);
                 descField.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
                 ));
@@ -226,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
             TextView categoryField = new TextView(this);
             categoryField.setText(action.getCategory().getName());
             categoryField.setTextAppearance(this, R.style.listDescription);
+            categoryField.setPadding(15, 0, 0, 0);
             categoryField.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
             ));
@@ -234,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
             String dateStr = action.getDate().get(GregorianCalendar.DAY_OF_MONTH) + "." + (action.getDate().get(GregorianCalendar.MONTH) + 1);
             dateField.setText(dateStr);
             dateField.setGravity(Gravity.END);
+            dateField.setPadding(0, 0, 15, 0);
             dateField.setTextAppearance(this, R.style.listDescription);
             dateField.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
@@ -337,8 +341,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Setting a date for a new action
+     * @param view doing nothing here
+     */
     public void onSetDateClick(View view) {
         Intent askForDate = new Intent(this, DateSelection.class);
         startActivityForResult(askForDate, REQUEST_FOR_DATE);
+    }
+
+    public void onShowStatisticsClick(View view) {
+        Intent openStatisticsWindow = new Intent(this, StatisticsActivity.class);
+        openStatisticsWindow.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(openStatisticsWindow);
+    }
+
+    public void onShowBudgetScreenClick(View view) {
     }
 }

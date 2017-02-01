@@ -5,4 +5,6 @@
     <string name="set_date">Set Date</string>
     <string name="statistics">Statistics</string>
     <string name="budget">Budget</string>
+    <string name="all_years_spinner">All years</string>
+    <string name="all_months_spinner">All months</string>
 </resources>

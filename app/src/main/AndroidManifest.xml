@@ -14,18 +14,19 @@
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <data android:name="android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Activities.CategorySelection"
             android:label="Select category"
-            android:theme="@style/AppTheme.Dialog">
-        </activity>
-        <activity android:name=".Activities.DateSelection"
+            android:theme="@style/AppTheme.Dialog" />
+        <activity
+            android:name=".Activities.DateSelection"
             android:label="Select date"
-            android:theme="@style/AppTheme.Dialog">
-        </activity>
+            android:theme="@style/AppTheme.Dialog" />
+        <activity android:name=".Activities.StatisticsActivity" />
     </application>
 
 </manifest>
