@@ -22,4 +22,7 @@
         <item name="android:textSize">20dp</item>
         <item name="android:textColor">#e21b0f02</item>
     </style>
+    <style name="ButtonPaneText" parent="@android:style/Widget.DeviceDefault.Light.Button">
+
+    </style>
 </resources>

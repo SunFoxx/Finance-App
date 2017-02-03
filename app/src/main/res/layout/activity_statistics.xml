@@ -12,8 +12,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.97"
+        android:layout_height="0dp"
+        android:layout_weight="0.95"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"
@@ -69,9 +69,9 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="15"
-            android:background="@drawable/list_borders">
+            android:layout_height="0dp"
+            android:background="@drawable/list_borders"
+            android:layout_weight="30">
 
             <LinearLayout
                 android:id="@+id/statisticsListLayout"
@@ -79,7 +79,8 @@
                 android:layout_height="wrap_content"
                 android:divider="@drawable/list_divider"
                 android:orientation="vertical"
-                android:showDividers="middle|end">
+                android:showDividers="middle|end"
+                android:gravity="center_horizontal">
 
             </LinearLayout>
         </ScrollView>
@@ -87,11 +88,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_weight="0.03"
+        android:layout_weight="0.05"
         android:divider="@drawable/buttons_divider"
         android:orientation="horizontal"
         android:showDividers="middle"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/buttonTabHeight"
         android:id="@+id/buttonsLayoutStatisticWindow">
 
         <LinearLayout
@@ -110,7 +111,7 @@
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginLeft="40dp" />
 
-            <Button
+            <TextView
                 android:id="@+id/MainButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -118,7 +119,8 @@
                 android:layout_weight="5"
                 android:text="Actions"
                 android:gravity="left|center_vertical"
-                android:background="@drawable/fully_transparent" />
+                android:background="@drawable/fully_transparent"
+                style="@style/ButtonPaneText"/>
         </LinearLayout>
 
         <LinearLayout
@@ -137,7 +139,7 @@
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginLeft="40dp"/>
 
-            <Button
+            <TextView
                 android:id="@+id/BudgetButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -145,7 +147,8 @@
                 android:layout_weight="5"
                 android:text="@string/budget"
                 android:gravity="left|center_vertical"
-                android:background="@drawable/fully_transparent" />
+                android:background="@drawable/fully_transparent"
+                style="@style/ButtonPaneText"/>
         </LinearLayout>
 
     </LinearLayout>

@@ -36,7 +36,7 @@ import static com.esharoha.financeapp.common.Category.categories;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final static String SAVE_FILE = "content";
+    public final static String SAVE_FILE = "content";
     private HashMap<LinearLayout, Action> actionMap;
     private EditText number;
     private EditText text;
@@ -103,6 +103,14 @@ public class MainActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadData();
+        clearTable();
+        fillTable();
+    }
+
     public void onSubmitClick(View view) {
         String countFromField = number.getText().toString().trim();
         String descriptionFromField = text.getText().toString().trim();
@@ -155,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
         //refreshing list
         clearTable();
+        clearFields();
 
         //filling list
         fillTable();
@@ -193,6 +202,9 @@ public class MainActivity extends AppCompatActivity {
      */
     private void clearTable() {
         table.removeAllViews();
+    }
+
+    private void clearFields() {
         number.setText("");
         text.setText("");
         categoryButton.setText(getResources().getString(R.string.select_category));

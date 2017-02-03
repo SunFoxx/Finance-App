@@ -7,14 +7,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.esharoha.financeapp.R;
 import com.esharoha.financeapp.common.Action;
 import com.esharoha.financeapp.common.Category;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
@@ -74,6 +82,13 @@ public class StatisticsActivity extends AppCompatActivity {
 
         filterActions();
         fillTable();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+        saveData();
     }
 
     private void filterActions() {
@@ -209,7 +224,14 @@ public class StatisticsActivity extends AppCompatActivity {
             categoryBoxParams.setMargins(0, 10, 0, 0);
             categoryBox.setLayoutParams(categoryBoxParams);
             categoryBox.setBackground(getResources().getDrawable(R.drawable.list_background));
-            //categoryBox.setOnClickListener(categoryItemListener);
+            View.OnClickListener categoryItemListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clearTable();
+                    fillTableByCategory(categoryMap.get(v));
+                }
+            };
+            categoryBox.setOnClickListener(categoryItemListener);
 
             categoryBox.addView(categoryField);
             categoryBox.addView(countField);
@@ -220,8 +242,76 @@ public class StatisticsActivity extends AppCompatActivity {
 
     }
 
+    private void fillTableByCategory(Category cat) {
+        LinkedList<Action> actionsByCategory = new LinkedList<>();
+        int total = 0;
+        for (Action act : filteredActions) {
+            total += act.getCount();
+            if (act.getCategory() == cat) {
+                actionsByCategory.add(act);
+            }
+        }
+
+        Button backButton = new Button(this);
+        backButton.setText("back");
+        backButton.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveData();
+                clearTable();
+
+                filterActions();
+                fillTable();
+            }
+        });
+
+        LinearLayout byCategoryTable = new LinearLayout(this);
+        byCategoryTable.setOrientation(LinearLayout.VERTICAL);
+        byCategoryTable.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+        ));
+        byCategoryTable.setDividerDrawable(getResources().getDrawable(R.drawable.list_divider));
+        byCategoryTable.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+
+        table.addView(backButton);
+
+        ListItemGen generator = new ListItemGen(this, byCategoryTable, actionsByCategory);
+        generator.fillTable();
+
+        ScrollView categoryScroll = new ScrollView(this);
+        categoryScroll.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        categoryScroll.addView(byCategoryTable);
+        table.addView(categoryScroll);
+
+        totalField.setText(Integer.toString(total));
+
+    }
+
     private void clearTable() {
         table.removeAllViews();
         totalField.setText("0");
+    }
+
+    private void saveData() {
+        try {
+            FileOutputStream fos = new FileOutputStream(getApplicationContext().getFilesDir() + File.separator + MainActivity.SAVE_FILE);
+            ObjectOutputStream out = new ObjectOutputStream(fos);
+            out.writeObject(allActions);
+            out.writeObject(categories);
+            out.close();
+        } catch (FileNotFoundException e) {
+            Toast err = Toast.makeText(this, "Save error: fnf", Toast.LENGTH_SHORT);
+            err.setGravity(Gravity.CENTER, 0, -250);
+            err.show();
+        }
+        catch (IOException e) {
+            Toast err = Toast.makeText(this, "Save error: IO", Toast.LENGTH_SHORT);
+            err.setGravity(Gravity.CENTER, 0, -250);
+            err.show();
+        }
     }
 }

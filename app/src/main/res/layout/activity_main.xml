@@ -12,14 +12,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.95"
+        android:layout_height="0dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:layout_weight="0.95">
 
         <EditText
             android:id="@+id/moneySpent"
@@ -94,11 +94,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_weight="0.05"
         android:divider="@drawable/buttons_divider"
         android:orientation="horizontal"
         android:showDividers="middle"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/buttonTabHeight"
+        android:baselineAligned="false"
+        android:layout_gravity="bottom"
+        android:layout_weight="0.05">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -117,7 +119,7 @@
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginLeft="40dp" />
 
-            <Button
+            <TextView
                 android:id="@+id/StatisticsButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -125,7 +127,9 @@
                 android:layout_weight="5"
                 android:text="@string/statistics"
                 android:gravity="left|center_vertical"
-                android:background="@drawable/fully_transparent" />
+                android:background="@drawable/fully_transparent"
+                android:onClick="onShowStatisticsClick"
+                style="@style/ButtonPaneText"/>
         </LinearLayout>
 
         <LinearLayout
@@ -145,7 +149,7 @@
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginLeft="40dp"/>
 
-            <Button
+            <TextView
                 android:id="@+id/button2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -153,7 +157,9 @@
                 android:layout_weight="5"
                 android:text="@string/budget"
                 android:gravity="left|center_vertical"
-                android:background="@drawable/fully_transparent" />
+                android:background="@drawable/fully_transparent"
+                style="@style/ButtonPaneText"
+                android:onClick="onShowBudgetScreenClick"/>
         </LinearLayout>
 
     </LinearLayout>
