@@ -215,81 +215,8 @@ public class MainActivity extends AppCompatActivity {
      * Reloading our Table
      */
     private void fillTable() {
-        for (Action action : allActions) {
-            //generating Textviews
-            TextView countField = new TextView(this);
-            countField.setText(Integer.toString(action.getCount()));
-            countField.setTextAppearance(this, R.style.listCount);
-            countField.setGravity(Gravity.END);
-            countField.setPadding(0, 0, 15, 0);
-            countField.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
-            ));
-
-            TextView descField = null;
-            if (!action.getDescription().equals("")) {
-                descField = new TextView(this);
-                descField.setText(action.getDescription());
-                descField.setTextAppearance(this, R.style.listCategory);
-                descField.setPadding(15, 0, 0, 0);
-                descField.setLayoutParams(new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
-                ));
-            }
-
-            TextView categoryField = new TextView(this);
-            categoryField.setText(action.getCategory().getName());
-            categoryField.setTextAppearance(this, R.style.listDescription);
-            categoryField.setPadding(15, 0, 0, 0);
-            categoryField.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
-            ));
-
-            TextView dateField = new TextView(this);
-            String dateStr = action.getDate().get(GregorianCalendar.DAY_OF_MONTH) + "." + (action.getDate().get(GregorianCalendar.MONTH) + 1);
-            dateField.setText(dateStr);
-            dateField.setGravity(Gravity.END);
-            dateField.setPadding(0, 0, 15, 0);
-            dateField.setTextAppearance(this, R.style.listDescription);
-            dateField.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f
-            ));
-
-            //Filling action field
-
-            LinearLayout actionBox = new LinearLayout(this);
-            actionBox.setOrientation(LinearLayout.VERTICAL);
-            LinearLayout.LayoutParams actionBoxParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            actionBoxParams.setMargins(0, 20, 0, 0);
-            actionBox.setLayoutParams(actionBoxParams);
-            actionBox.setBackground(getResources().getDrawable(R.drawable.list_background));
-            actionBox.setOnClickListener(actionItemListener);
-
-            LinearLayout actionFirstRow = new LinearLayout(this);
-            actionFirstRow.setOrientation(LinearLayout.HORIZONTAL);
-            actionFirstRow.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-            ));
-            if (descField != null) {
-                actionFirstRow.addView(descField);
-            }
-            actionFirstRow.addView(dateField);
-
-            LinearLayout actionSecondRow = new LinearLayout(this);
-            actionSecondRow.setOrientation(LinearLayout.HORIZONTAL);
-            actionSecondRow.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-            ));
-            actionSecondRow.addView(categoryField);
-            actionSecondRow.addView(countField);
-
-            actionBox.addView(actionFirstRow);
-            actionBox.addView(actionSecondRow);
-
-            table.addView(actionBox, 0);
-            actionMap.put(actionBox, action);
-        }
+        ListItemGen generator = new ListItemGen(this, table, allActions);
+        generator.fillTable();
 
         View current = this.getCurrentFocus();
         if (current != null) {
