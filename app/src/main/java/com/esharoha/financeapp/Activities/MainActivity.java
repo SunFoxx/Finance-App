@@ -3,16 +3,12 @@ package com.esharoha.financeapp.Activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.PopupMenu;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.esharoha.financeapp.R;
@@ -28,7 +24,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 import static com.esharoha.financeapp.common.Action.allActions;
@@ -37,7 +32,6 @@ import static com.esharoha.financeapp.common.Category.categories;
 public class MainActivity extends AppCompatActivity {
 
     public final static String SAVE_FILE = "content";
-    private HashMap<LinearLayout, Action> actionMap;
     private EditText number;
     private EditText text;
     private LinearLayout table;
@@ -47,49 +41,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_FOR_CAT = 1;
     private static final int REQUEST_FOR_DATE = 2;
 
-
-    private View.OnClickListener actionItemListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            v.setBackground(getResources().getDrawable(R.drawable.list_active));
-            showPopUpMenu(v);
-        }
-    };
-
-    private void showPopUpMenu(final View v) {
-        PopupMenu actionMenu = new PopupMenu(this, v);
-        actionMenu.inflate(R.menu.action_popup);
-
-        actionMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.remove) {
-                    Action.allActions.remove(actionMap.get((LinearLayout)v));
-                    actionMap.remove(v);
-                    table.removeView(v);
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });
-
-        actionMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
-            @Override
-            public void onDismiss(PopupMenu menu) {
-                v.setBackground(getResources().getDrawable(R.drawable.list_background));
-            }
-        });
-
-        actionMenu.show();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        actionMap = new HashMap<>();
         number = (EditText) findViewById(R.id.moneySpent);
         text = (EditText) findViewById(R.id.description);
         table = (LinearLayout) findViewById(R.id.listLayout);
