@@ -14,24 +14,15 @@ import android.widget.Toast;
 import com.esharoha.financeapp.R;
 import com.esharoha.financeapp.common.Action;
 import com.esharoha.financeapp.common.Category;
+import com.esharoha.financeapp.common.Serializator;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.LinkedList;
 
 import static com.esharoha.financeapp.common.Action.allActions;
-import static com.esharoha.financeapp.common.Category.categories;
 
 public class MainActivity extends AppCompatActivity {
 
-    public final static String SAVE_FILE = "content";
+    private Serializator serializator;
     private EditText number;
     private EditText text;
     private LinearLayout table;
@@ -51,8 +42,9 @@ public class MainActivity extends AppCompatActivity {
         table = (LinearLayout) findViewById(R.id.listLayout);
         categoryButton = (Button) findViewById(R.id.SelectCategory);
         dateButton = (Button) findViewById(R.id.SelectDate);
+        serializator = new Serializator(getApplicationContext(), this);
 
-        loadData();
+        serializator.loadData();
         fillTable();
 
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -62,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadData();
+        serializator.loadData();
         clearTable();
         fillTable();
     }
@@ -135,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
      * Getting date from other Activities
      * @param requestCode request ID
      * @param resultCode result from other Activity
-     * @param data data from other Activity
+     * @param data - data from other Activity
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -187,53 +179,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        saveData();
-    }
-
-    /**
-     * Serializing data
-     */
-    private void saveData() {
-        try {
-            FileOutputStream fos = new FileOutputStream(getApplicationContext().getFilesDir() + File.separator + SAVE_FILE);
-            ObjectOutputStream out = new ObjectOutputStream(fos);
-            out.writeObject(allActions);
-            out.writeObject(categories);
-            out.close();
-        } catch (FileNotFoundException e) {
-            Toast err = Toast.makeText(this, "Save error: fnf", Toast.LENGTH_SHORT);
-            err.setGravity(Gravity.CENTER, 0, -250);
-            err.show();
-        }
-        catch (IOException e) {
-            Toast err = Toast.makeText(this, "Save error: IO", Toast.LENGTH_SHORT);
-            err.setGravity(Gravity.CENTER, 0, -250);
-            err.show();
-        }
-    }
-    /**
-     * Deserialization
-     */
-    private void loadData() {
-        try {
-            FileInputStream fis = new FileInputStream(getApplicationContext().getFilesDir() + File.separator + SAVE_FILE);
-            ObjectInputStream input = new ObjectInputStream(fis);
-            Action.allActions = (LinkedList<Action>) input.readObject();
-            Category.categories = (ArrayList<Category>) input.readObject();
-            fis.close();
-        } catch (FileNotFoundException e) {
-            Toast err = Toast.makeText(this, "Load error: fnf", Toast.LENGTH_SHORT);
-            err.setGravity(Gravity.CENTER, 0, -250);
-            err.show();
-        } catch (IOException e) {
-            Toast err = Toast.makeText(this, "Load error: IO", Toast.LENGTH_SHORT);
-            err.setGravity(Gravity.CENTER, 0, -250);
-            err.show();
-        } catch (ClassNotFoundException e) {
-            Toast err = Toast.makeText(this, "Load error: cnf", Toast.LENGTH_SHORT);
-            err.setGravity(Gravity.CENTER, 0, -250);
-            err.show();
-        }
+        serializator.saveData();
     }
 
     /**

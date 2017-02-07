@@ -1,5 +1,6 @@
 package com.esharoha.financeapp.Activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -12,17 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.esharoha.financeapp.R;
 import com.esharoha.financeapp.common.Action;
 import com.esharoha.financeapp.common.Category;
+import com.esharoha.financeapp.common.Serializator;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
@@ -31,7 +27,6 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import static com.esharoha.financeapp.common.Action.allActions;
-import static com.esharoha.financeapp.common.Category.categories;
 
 public class StatisticsActivity extends AppCompatActivity {
 
@@ -39,6 +34,7 @@ public class StatisticsActivity extends AppCompatActivity {
     private Spinner spinnerMonth;
     private LinearLayout table;
     private TextView totalField;
+    private Serializator serializator;
 
     private ArrayList<String> yearList;
     private ArrayList<String> monthList;
@@ -76,6 +72,9 @@ public class StatisticsActivity extends AppCompatActivity {
         monthList = new ArrayList<>();
         categoryMap = new HashMap<>();
         filteredActions = allActions;
+        serializator = new Serializator(getApplicationContext(), this);
+
+        serializator.loadData();
 
         fillLists();
         fillSpinners();
@@ -88,7 +87,7 @@ public class StatisticsActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         overridePendingTransition(0, 0);
-        saveData();
+        serializator.saveData();
     }
 
     private void filterActions() {
@@ -259,7 +258,7 @@ public class StatisticsActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveData();
+                serializator.saveData();
                 clearTable();
 
                 filterActions();
@@ -296,22 +295,9 @@ public class StatisticsActivity extends AppCompatActivity {
         totalField.setText("0");
     }
 
-    private void saveData() {
-        try {
-            FileOutputStream fos = new FileOutputStream(getApplicationContext().getFilesDir() + File.separator + MainActivity.SAVE_FILE);
-            ObjectOutputStream out = new ObjectOutputStream(fos);
-            out.writeObject(allActions);
-            out.writeObject(categories);
-            out.close();
-        } catch (FileNotFoundException e) {
-            Toast err = Toast.makeText(this, "Save error: fnf", Toast.LENGTH_SHORT);
-            err.setGravity(Gravity.CENTER, 0, -250);
-            err.show();
-        }
-        catch (IOException e) {
-            Toast err = Toast.makeText(this, "Save error: IO", Toast.LENGTH_SHORT);
-            err.setGravity(Gravity.CENTER, 0, -250);
-            err.show();
-        }
+    public void onActionsClick(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(intent);
     }
 }
